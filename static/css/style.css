@@ -443,3 +443,14 @@ footer {
         max-width: 200px;
     }
 }
+/* --- translate leiste ausblenden --- */
+.goog-te-banner-frame,
+.skiptranslate,
+iframe.goog-te-banner-frame {
+    display: none !important;
+}
+
+body {
+    top: 0px !important;
+    position: static !important;
+}

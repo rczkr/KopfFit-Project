@@ -10,15 +10,62 @@
 </head>
 <body>
 
-    <nav>
-        <a href="{{ url_for('index') }}">Start Seite</a>
+<nav style="display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; position: relative;">
+
+    <!-- platzhalter für die symertrie-->
+    <div style="flex: 1;"></div>
+
+    <!-- mittlerer bereich-->
+    <div style="flex: 2; text-align: center;">
+        <a href="{{ url_for('index') }}">Startseite</a>
         <a href="{{ url_for('spiel_starten') }}">Spiel starten</a>
         <a href="{{ url_for('uber_uns') }}">Über uns</a>
         <a href="{{ url_for('kontakt') }}">Kontakt</a>
         {% if session.get('user_id') %}
             <a href="{{ url_for('logout') }}" style="color: #c62828;">Abmelden</a>
         {% endif %}
-    </nav>
+    </div>
+
+    <!-- rechte seite-->
+    <div style="flex: 1; display: flex; justify-content: flex-end; gap: 8px; align-items: center;">
+        <button onclick="changeLanguage('de')" title="Deutsch" style="background:none; border:none; font-size:20px; cursor:pointer;">🇩🇪</button>
+        <button onclick="changeLanguage('en')" title="English" style="background:none; border:none; font-size:20px; cursor:pointer;">🇬🇧</button>
+        <button onclick="changeLanguage('hu')" title="Magyar" style="background:none; border:none; font-size:20px; cursor:pointer;">🇭🇺</button>
+
+    </div>
+
+    <!-- unsichtbares google translate element -->
+    <div id="google_translate_element" style="display:none;"></div>
+
+    <!-- google translate logik -->
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'de',
+                includedLanguages: 'de,en,hu',
+                autoDisplay: false
+            }, 'google_translate_element');
+        }
+
+        function changeLanguage(langCode) {
+            if (langCode === 'de') {
+                document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; domain=" + document.domain + "; path=/;";
+                location.reload();
+                return;
+            }
+
+            const selectEl = document.querySelector('#google_translate_element select');
+            if (selectEl) {
+                selectEl.value = langCode;
+                selectEl.dispatchEvent(new Event('change'));
+            } else {
+                setTimeout(() => changeLanguage(langCode), 300);
+            }
+        }
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</nav>
 
     <main class="container {% block container_class %}{% endblock %}">
         {% with messages = get_flashed_messages(with_categories=true) %}
